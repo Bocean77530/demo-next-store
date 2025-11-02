@@ -7,7 +7,8 @@ import LogoSquare from "@/components/logo-square";
 import CartModal from "@/components/cart/modal";
 
 export async function Navbar() {
-  const menu = await getMenu("next-js-frontend-menu");
+  const menu = await getMenu("sidebar-menu");
+  console.log("menu", menu);
   return (
     <nav className="flex items-center justify-between p-4 lg:px-6 sticky top-0 backdrop-blur-sm z-[999]">
       <div className="block flex-none md:hidden">

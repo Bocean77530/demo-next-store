@@ -20,33 +20,8 @@ export default function Home() {
               </h1>
             </div>
             <div className="flex flex-col items-start space-y-4">
-              <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                Explore our curated collections of stylish apparel and
-                accessories for every occasion.
-              </p>
-              <div className="flex flex-col w-full md:flex-row gap-2 text-nowrap">
-                <Link
-                  href="/search/womens-collection"
-                  className="inline-flex h-9 items-center justify-center rounded-md border bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                  prefetch={false}
-                >
-                  Shop Women
-                </Link>
-                <Link
-                  href="/search/mens-collection"
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                  prefetch={false}
-                >
-                  Shop Men
-                </Link>
-                <Link
-                  href="/search/sales"
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-red-300 border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-red-300 hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                  prefetch={false}
-                >
-                  Shop Sales
-                </Link>
-              </div>
+
+
             </div>
           </div>
           <img
@@ -69,78 +44,12 @@ export default function Home() {
                 Trending Now
               </h2>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Check out our latest collection of stylish and comfortable
-                clothing.
+                Check out our latest collection of stylish.
               </p>
             </div>
           </div>
-          <div className="mx-auto grid items-start justify-center gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-4">
-            <div className="grid gap-1">
-              <Link
-                href="/search/womens-collection"
-                className="group"
-                prefetch={false}
-              >
-                <img
-                  src="/womens-collection.png"
-                  width="400"
-                  height="500"
-                  alt="Women's Collection"
-                  className="aspect-[4/5] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform"
-                />
-                <h3 className="mt-4 text-lg font-bold group-hover:underline">
-                  Women\&apos;s Collection
-                </h3>
-              </Link>
-            </div>
-            <div className="grid gap-1">
-              <Link
-                href="/search/mens-collection"
-                className="group"
-                prefetch={false}
-              >
-                <img
-                  src="/mens-collection.png"
-                  width="400"
-                  height="500"
-                  alt="Men's Collection"
-                  className="aspect-[4/5] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform"
-                />
-                <h3 className="mt-4 text-lg font-bold group-hover:underline">
-                  Men\&apos;s Collection
-                </h3>
-              </Link>
-            </div>
-            <div className="grid gap-1">
-              <Link href="/search/kids" className="group" prefetch={false}>
-                <img
-                  src="/kids-collection.png"
-                  width="400"
-                  height="500"
-                  alt="Kids' Collection"
-                  className="aspect-[4/5] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform"
-                />
-                <h3 className="mt-4 text-lg font-bold group-hover:underline">
-                  Kids\&apos;s Collection
-                </h3>
-              </Link>
-            </div>
-            <div className="grid gap-1">
-              <Link href="/search/sales" className="group" prefetch={false}>
-                <img
-                  src="/sales-collection.png"
-                  width="400"
-                  height="500"
-                  alt="Sale's Collection"
-                  className="aspect-[4/5] overflow-hidden rounded-lg object-cover group-hover:scale-105 transition-transform"
-                />
-                <h3 className="mt-4 text-lg font-bold group-hover:underline">
-                  Sale\&apos;s Collection
-                </h3>
-              </Link>
-            </div>
-          </div>
         </div>
+
       </section>
       <section className="w-full py-12 lg:py-7 bg-[url('/sale-backdrop.svg')] grid place-content-center">
         <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
@@ -157,15 +66,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="mx-auto w-full max-w-sm space-y-2 z-50">
-            <Link
-              href="#"
-              className="inline-flex h-10 items-center justify-center rounded-md bg-slate-200 dark:bg-black px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-              prefetch={false}
-            >
-              Shop Sale
-            </Link>
-          </div>
+
         </div>
       </section>
     </main>
