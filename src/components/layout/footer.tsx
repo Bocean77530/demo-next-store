@@ -85,7 +85,7 @@ export default function Footer() {
                             CONTACT US
                         </h3>
                         <div className="space-y-2 text-sm">
-                            <p>emial address is coming soon</p>
+                            <p>email address is coming soon</p>
                             
                         </div>
                         

@@ -5,6 +5,7 @@ import MobileMenu from "./mobile-menu";
 import Search from "./search";
 import LogoSquare from "@/components/logo-square";
 import CartModal from "@/components/cart/modal";
+import { User } from "lucide-react";
 
 export async function Navbar() {
   const menu = await getMenu("sidebar-menu");
@@ -46,7 +47,16 @@ export async function Navbar() {
         <div className="hidden justify-center md:flex md:w-1/3">
           <Search />
         </div>
-        <div className="flex justify-end md:w-1/3">
+        <div className="flex justify-end items-center gap-4 md:w-1/3">
+          <Link
+            href="https://shopify.com/73808052381/account"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 hover:opacity-80 transition-opacity"
+            aria-label="Account"
+          >
+            <User size={24} className="text-gray-700 dark:text-neutral-400" />
+          </Link>
           <CartModal />
         </div>
       </div>
