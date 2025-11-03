@@ -14,7 +14,7 @@ export default function Footer() {
                             SIGN UP FOR OUR NEWSLETTER
                         </h3>
                         <p className="text-sm leading-relaxed">
-                            Sign up for exclusive drops, discounts, and get FREE US shipping on your first order, unsubscribe anytime.
+                            Sign up for exclusive drops, discounts, and get a 10% discount on your first order, unsubscribe anytime.
                         </p>
                         <Link 
                             href="/newsletter" 
@@ -27,7 +27,7 @@ export default function Footer() {
                     {/* Middle Section - Help */}
                     <div className="space-y-4">
                         <h3 className="text-lg font-bold uppercase tracking-wide">
-                            HELP
+                            Our Services
                         </h3>
                         <ul className="space-y-2 text-sm">
                             <li>
@@ -36,13 +36,13 @@ export default function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/returns" className="hover:text-gray-300 transition-colors">
-                                    Returns
+                                <Link href="/terms-and-conditions" className="hover:text-gray-300 transition-colors">
+                                    Terms and Conditions
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/faqs" className="hover:text-gray-300 transition-colors">
-                                    FAQs
+                                <Link href="/help-center" className="hover:text-gray-300 transition-colors">
+                                    Help Center
                                 </Link>
                             </li>
                             <li>
@@ -51,13 +51,18 @@ export default function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/wholesale" className="hover:text-gray-300 transition-colors">
-                                    Wholesale
+                                <Link href="/Orders" className="hover:text-gray-300 transition-colors">
+                                    Orders
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/accessibility" className="hover:text-gray-300 transition-colors">
-                                    Accessibility
+                                <Link href="/size-guide" className="hover:text-gray-300 transition-colors">
+                                    Size Guide
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/care-instructions" className="hover:text-gray-300 transition-colors">
+                                    Care Instructions
                                 </Link>
                             </li>
                             <li>
@@ -65,8 +70,14 @@ export default function Footer() {
                                     Site Map
                                 </Link>
                             </li>
+                            <li>
+                                <Link href="/contact" className="hover:text-gray-300 transition-colors">
+                                    Contact Us
+                                </Link>
+                            </li>
                         </ul>
                     </div>
+
 
                     {/* Right Section - Contact */}
                     <div className="space-y-4">
