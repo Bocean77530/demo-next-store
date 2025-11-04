@@ -52,7 +52,7 @@ export async function Navbar() {
             href="https://shopify.com/73808052381/account"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 hover:opacity-80 transition-opacity"
+            className="p-2 hover:scale-110 transition-opacity"
             aria-label="Account"
           >
             <User size={24} className="text-gray-700 dark:text-neutral-400" />
