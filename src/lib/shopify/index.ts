@@ -192,10 +192,12 @@ export async function getProducts({
   query,
   reverse,
   sortKey,
+  first = 100,
 }: {
   query?: string;
   reverse?: boolean;
   sortKey?: string;
+  first?: number;
 }): Promise<Product[]> {
   const res = await shopifyFetch<ShopifyProductsOperation>({
     query: getProductsQuery,
@@ -204,6 +206,7 @@ export async function getProducts({
       query,
       reverse,
       sortKey,
+      first,
     },
   });
 
