@@ -46,6 +46,16 @@ export function FilterGroup({
             />
           )}
 
+          {group.type === "productType" && (
+            <CheckboxFilter
+              label={group.label}
+              options={group.options}
+              filterKey="productType"
+              filterType="productType"
+              activeValues={activeFilters.productType || []}
+            />
+          )}
+
           {group.type === "option" && (
             <CheckboxFilter
               label={group.label}

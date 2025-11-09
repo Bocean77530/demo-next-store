@@ -58,6 +58,28 @@ export type SEO = {
   title: string;
   description: string;
 };
+
+export type VideoSource = {
+  url: string;
+  mimeType: string;
+};
+
+export type VideoReference = {
+  __typename: "Video";
+  sources: VideoSource[];
+  previewImage?: {
+    url: string;
+  } | null;
+};
+
+export type Metafield = {
+  namespace: string;
+  key: string;
+  value: string;
+  type: string;
+  reference?: VideoReference | null;
+};
+
 export type ShopifyProduct = {
   id: string;
   handle: string;
@@ -65,6 +87,7 @@ export type ShopifyProduct = {
   title: string;
   description: string;
   descriptionHtml: string;
+  productType: string;
   options: ProductOption[];
   priceRange: {
     maxVariantPrice: Money;
@@ -96,6 +119,7 @@ export type ShopifyProductsOperation = {
 };
 
 export type ShopifyCollection = {
+  metafields: Metafield[];
   handle: string;
   title: string;
   description: string;

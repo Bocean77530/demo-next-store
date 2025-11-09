@@ -1,4 +1,4 @@
-export type FilterType = "tag" | "option" | "price" | "collection";
+export type FilterType = "tag" | "option" | "price" | "collection" | "productType";
 
 export type FilterValue = {
   type: FilterType;
@@ -17,6 +17,7 @@ export type ActiveFilters = {
   options: Record<string, string[]>; // option name -> values
   price?: PriceRange;
   collections: string[];
+  productType?: string[];
 };
 
 export type FilterOption = {

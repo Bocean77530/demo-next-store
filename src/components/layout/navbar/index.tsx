@@ -6,17 +6,18 @@ import Search from "./search";
 import LogoSquare from "@/components/logo-square";
 import CartModal from "@/components/cart/modal";
 import { User } from "lucide-react";
+import MegaMenu from "./mega-menu";
 
 export async function Navbar() {
   const menu = await getMenu("sidebar-menu");
   
   return (
-    <nav className="flex items-center justify-between p-4 lg:px-6 sticky top-0 backdrop-blur-sm z-999">
+    <nav className="flex h-16 items-center justify-between p-4 lg:px-6 sticky top-0 backdrop-blur-sm z-999">
       <div className="block flex-none md:hidden">
-        <MobileMenu menu={menu} />
+        <MobileMenu menu={[]} />
       </div>
-      <div className="flex w-full items-center">
-        <div className="flex w-full md:w-1/3">
+      <div className="flex h-full w-full items-center">
+        <div className="flex h-full w-full md:w-1/3">
           <Link
             href={"/"}
             prefetch={true}
@@ -28,7 +29,7 @@ export async function Navbar() {
             </div> */}
           </Link>
 
-          {menu.length > 0 ? (
+          {/* {menu.length > 0 ? (
             <ul className="hidden gap-6 text-sm md:flex md:items-center">
               {menu.map((item: Menu) => (
                 <li key={item.title}>
@@ -42,7 +43,10 @@ export async function Navbar() {
                 </li>
               ))}
             </ul>
-          ) : null}
+          ) : null} */}
+          <div className="hidden gap-6 text-sm md:flex md:items-center md:h-9">
+            <MegaMenu />
+          </div>
         </div>
         <div className="hidden justify-center md:flex md:w-1/3">
           <Search />

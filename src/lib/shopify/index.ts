@@ -247,6 +247,12 @@ export async function getCollections(): Promise<Collection[]> {
   });
 
   const shopifyCollections = removeEdgesAndNodes(res?.body?.data?.collections);
+  
+  // Log for debugging - remove in production if needed
+  if (process.env.NODE_ENV === "development") {
+    console.log(`[Collections] Fetched ${shopifyCollections.length} collections from Shopify`);
+  }
+  
   const collections = [
     {
       handle: "",
@@ -258,6 +264,7 @@ export async function getCollections(): Promise<Collection[]> {
       },
       path: "/search",
       updatedAt: new Date().toISOString(),
+      metafields: [],
     },
     // Filter out the hidden products
     ...reshapeCollections(shopifyCollections).filter(

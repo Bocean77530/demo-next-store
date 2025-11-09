@@ -38,6 +38,18 @@ export function ActiveFiltersList() {
     });
   }
 
+  // Add product type filters
+  if (filters.productType) {
+    filters.productType.forEach((productType) => {
+      activeFilters.push({
+        type: "productType",
+        key: "productType",
+        value: productType,
+        label: productType,
+      });
+    });
+  }
+
   // Add option filters
   Object.entries(filters.options).forEach(([optionName, values]) => {
     values.forEach((value) => {

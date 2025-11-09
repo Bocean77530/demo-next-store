@@ -9,6 +9,29 @@ export const collectionFragment = /* GraphQL */ `
       ...seo
     }
     updatedAt
+    metafields(
+      identifiers: [
+        { namespace: "custom", key: "isnewrelease" },
+        { namespace: "custom", key: "showimages" },
+        { namespace: "custom", key: "showvideo" }
+      ]
+    ) {
+      key
+      namespace
+      value
+      reference {
+        __typename
+        ... on Video {
+          sources {
+            url
+            mimeType
+          }
+          previewImage {
+            url
+          }
+        }
+      }
+    }
   }
   ${seoFragment}
 `;

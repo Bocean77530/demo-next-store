@@ -14,10 +14,12 @@ async function FilterSidebarWrapper({
   pathname: string;
 }) {
   const collections = await getCollections();
-  const collectionsList = collections.map((c) => ({
-    handle: c.handle,
-    title: c.title,
-  }));
+  const collectionsList = collections
+    .filter((c) => c.handle !== "") // Filter out "All" collection
+    .map((c) => ({
+      handle: c.handle,
+      title: c.title,
+    }));
 
   return <FilterSidebar searchParams={searchParams} collections={collectionsList} pathname={pathname} />;
 }

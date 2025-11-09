@@ -38,6 +38,8 @@ export function CheckboxFilter({
           return [collectionFromPath];
         }
         return [];
+      case "productType":
+        return searchParams.getAll("filter.p.product_type");
       case "option":
         return searchParams.getAll(`option:${filterKey}`);
       default:
@@ -49,66 +51,77 @@ export function CheckboxFilter({
 
   return (
     <div className="space-y-2">
-      {options.map((option) => {
-        // Use URL params for active state, fallback to prop if needed
-        const isActive = currentActiveValues.includes(option.value) || activeValues.includes(option.value);
-        const filter: FilterValue = {
-          type: filterType,
-          key: filterKey,
-          value: option.value,
-          label: option.label || option.value,
-        };
-
-        // For collections, use path-based routing instead of query params
-        let href: string;
-        if (filterType === "collection") {
-          if (isActive) {
-            // If clicking on active collection, go back to /search
-            href = "/search";
-          } else {
-            // Navigate to the collection page
-            href = `/search/${option.value}`;
+      {options
+        .filter((option) => {
+          // Always show active options, even if count is 0
+          const isActive = currentActiveValues.includes(option.value) || activeValues.includes(option.value);
+          // For collections (no count), always show
+          if (option.count === undefined) {
+            return true;
           }
-        } else {
-          // For other filters, use query params
-          const newParams = isActive
-            ? removeFilterFromSearchParams(searchParams, filter)
-            : addFilterToSearchParams(searchParams, filter);
-          href = createUrl(pathname, newParams);
-        }
+          // Hide inactive options with 0 count
+          return isActive || option.count > 0;
+        })
+        .map((option) => {
+          // Use URL params for active state, fallback to prop if needed
+          const isActive = currentActiveValues.includes(option.value) || activeValues.includes(option.value);
+          const filter: FilterValue = {
+            type: filterType,
+            key: filterKey,
+            value: option.value,
+            label: option.label || option.value,
+          };
 
-        return (
-          <Link
-            key={option.value}
-            href={href}
-            className="flex items-center gap-2 text-sm text-neutral-700 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100"
-          >
-            <div
-              className={`flex h-4 w-4 items-center justify-center rounded border transition-colors ${
-                isActive
-                  ? "border-neutral-900 bg-neutral-900 dark:border-neutral-100 dark:bg-neutral-100"
-                  : "border-neutral-300 bg-white dark:border-neutral-600"
-              }`}
+          // For collections, use path-based routing instead of query params
+          let href: string;
+          if (filterType === "collection") {
+            if (isActive) {
+              // If clicking on active collection, go back to /search
+              href = "/search";
+            } else {
+              // Navigate to the collection page
+              href = `/search/${option.value}`;
+            }
+          } else {
+            // For other filters, use query params
+            const newParams = isActive
+              ? removeFilterFromSearchParams(searchParams, filter)
+              : addFilterToSearchParams(searchParams, filter);
+            href = createUrl(pathname, newParams);
+          }
+
+          return (
+            <Link
+              key={option.value}
+              href={href}
+              className="flex items-center gap-2 text-sm text-neutral-700 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100"
             >
-              {isActive && (
-                <Check
-                  className={`h-3 w-3 ${
-                    isActive
-                      ? "text-white dark:text-neutral-900"
-                      : "text-transparent"
-                  }`}
-                />
+              <div
+                className={`flex h-4 w-4 items-center justify-center rounded border transition-colors ${
+                  isActive
+                    ? "border-neutral-900 bg-neutral-900 dark:border-neutral-100 dark:bg-neutral-100"
+                    : "border-neutral-300 bg-white dark:border-neutral-600"
+                }`}
+              >
+                {isActive && (
+                  <Check
+                    className={`h-3 w-3 ${
+                      isActive
+                        ? "text-white dark:text-neutral-900"
+                        : "text-transparent"
+                    }`}
+                  />
+                )}
+              </div>
+              <span className="flex-1">{option.label || option.value}</span>
+              {option.count !== undefined && (
+                <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                  ({option.count})
+                </span>
               )}
-            </div>
-            <span className="flex-1">{option.label || option.value}</span>
-            {option.count !== undefined && (
-              <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                ({option.count})
-              </span>
-            )}
-          </Link>
-        );
-      })}
+            </Link>
+          );
+        })}
     </div>
   );
 }

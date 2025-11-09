@@ -36,9 +36,17 @@ export function parseFiltersFromSearchParams(
     };
   }
 
-  // Parse options (e.g., option:material=gold, option:size=large)
+  // Parse Shopify native filter format: filter.p.*
   searchParams.forEach((value, key) => {
-    if (key.startsWith("option:")) {
+    // Parse product_type: filter.p.product_type=value
+    if (key === "filter.p.product_type") {
+      filters.productType = filters.productType || [];
+      if (!filters.productType.includes(value)) {
+        filters.productType.push(value);
+      }
+    }
+    // Parse option format (e.g., option:material=gold, option:size=large)
+    else if (key.startsWith("option:")) {
       const optionName = key.replace("option:", "");
       if (!filters.options[optionName]) {
         filters.options[optionName] = [];
@@ -70,6 +78,14 @@ export function buildFilterQuery(filters: ActiveFilters, searchQuery?: string): 
       .map((collection) => `collection:${collection}`)
       .join(" OR ");
     queryParts.push(`(${collectionQuery})`);
+  }
+
+  // Add product type filters
+  if (filters.productType && filters.productType.length > 0) {
+    const productTypeQuery = filters.productType
+      .map((type) => `product_type:${type}`)
+      .join(" OR ");
+    queryParts.push(`(${productTypeQuery})`);
   }
 
   // Note: Price filters are NOT included in Shopify query
@@ -123,6 +139,13 @@ export function addFilterToSearchParams(
       }
       break;
 
+    case "productType":
+      const existingProductTypes = newParams.getAll("filter.p.product_type");
+      if (!existingProductTypes.includes(filter.value)) {
+        newParams.append("filter.p.product_type", filter.value);
+      }
+      break;
+
     case "option":
       const optionKey = `option:${filter.key}`;
       const existingOptions = newParams.getAll(optionKey);
@@ -162,6 +185,14 @@ export function removeFilterFromSearchParams(
         .forEach((collection) => newParams.append("collection", collection));
       break;
 
+    case "productType":
+      const productTypes = newParams.getAll("filter.p.product_type");
+      newParams.delete("filter.p.product_type");
+      productTypes
+        .filter((type) => type !== filter.value)
+        .forEach((type) => newParams.append("filter.p.product_type", type));
+      break;
+
     case "option":
       const optionKey = `option:${filter.key}`;
       const options = newParams.getAll(optionKey);
@@ -190,8 +221,17 @@ export function clearAllFilters(
   const sort = newParams.get("sort");
   const q = newParams.get("q");
   
+  // Delete all filter parameters
   newParams.forEach((_, key) => {
-    newParams.delete(key);
+    if (
+      key.startsWith("filter.p.product_type") ||
+      key.startsWith("option:") ||
+      key === "tag" ||
+      key === "minPrice" ||
+      key === "maxPrice"
+    ) {
+      newParams.delete(key);
+    }
   });
   
   if (sort) {
@@ -207,10 +247,12 @@ export function clearAllFilters(
 export function getActiveFiltersFromProducts(products: any[]): {
   tags: Map<string, number>;
   options: Map<string, Map<string, number>>;
+  productTypes: Map<string, number>;
   priceRange: { min: number; max: number };
 } {
   const tags = new Map<string, number>();
   const options = new Map<string, Map<string, number>>();
+  const productTypes = new Map<string, number>();
   let minPrice = Infinity;
   let maxPrice = -Infinity;
 
@@ -220,8 +262,12 @@ export function getActiveFiltersFromProducts(products: any[]): {
       tags.set(tag, (tags.get(tag) || 0) + 1);
     });
 
-    // Extract options from variants instead of product.options
-    // This avoids "Default Title" and handles variants better
+    // Count product types
+    if (product.productType) {
+      productTypes.set(product.productType, (productTypes.get(product.productType) || 0) + 1);
+    }
+
+    // Extract options from variants (for variant-based filters like Size, Color, etc.)
     product.variants?.forEach((variant: any) => {
       variant.selectedOptions?.forEach((selectedOption: { name: string; value: string }) => {
         // Skip "Default Title" values
@@ -251,6 +297,7 @@ export function getActiveFiltersFromProducts(products: any[]): {
   return {
     tags,
     options,
+    productTypes,
     priceRange: {
       min: minPrice === Infinity ? 0 : minPrice,
       max: maxPrice === -Infinity ? 0 : maxPrice,
