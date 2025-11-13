@@ -7,6 +7,7 @@ import { CartProvider } from "@/components/cart/cart-context";
 import { cookies } from "next/headers";
 import { getCart } from "@/lib/shopify";
 import Announcement from "@/components/layout/announcement";
+import RevealFooter from "@/components/layout/revealFooter";
 
 const inter = Inter({ subsets: ["latin"] });
 

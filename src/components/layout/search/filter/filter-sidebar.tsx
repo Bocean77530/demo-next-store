@@ -3,7 +3,7 @@ import { FilterGroup } from "./filter-group";
 import { ActiveFiltersList } from "./active-filters";
 import { ClearFiltersButton } from "./clear-filters-button";
 import { FilterGroup as FilterGroupType, ActiveFilters } from "@/lib/filters/types";
-import { parseFiltersFromSearchParams, buildFilterQuery, getActiveFiltersFromProducts } from "@/lib/filters/utils";
+import { parseFiltersFromSearchParams, buildFilterQuery, getActiveFiltersFromProducts, productMatchesAllFilters } from "@/lib/filters/utils";
 import { getProducts } from "@/lib/shopify";
 import { defaultSort, sorting } from "@/lib/constants";
 
@@ -31,28 +31,9 @@ async function FilterSidebarContent({
     query: filterQuery || searchQuery,
   });
 
-  // Apply price filter client-side (since Shopify query doesn't support price filtering)
-  if (filters.price && filteredProducts.length > 0) {
-    filteredProducts = filteredProducts.filter((product) => {
-      const productMinPrice = parseFloat(product.priceRange?.minVariantPrice?.amount || "0");
-      const productMaxPrice = parseFloat(product.priceRange?.maxVariantPrice?.amount || "0");
-      
-      if (filters.price?.min !== undefined && productMaxPrice < filters.price.min) {
-        return false;
-      }
-      if (filters.price?.max !== undefined && productMinPrice > filters.price.max) {
-        return false;
-      }
-      return true;
-    });
-  }
-
-  // Ensure product type filters are enforced even if Shopify query doesn't narrow results
-  if (filters.productType && filters.productType.length > 0) {
-    filteredProducts = filteredProducts.filter((product) =>
-      product.productType && filters.productType?.includes(product.productType)
-    );
-  }
+  filteredProducts = filteredProducts.filter((product) =>
+    productMatchesAllFilters(product, filters)
+  );
 
   // Get all product types from ALL products (no filters at all) to show all available types
   // Only apply search query if it exists, otherwise get all products

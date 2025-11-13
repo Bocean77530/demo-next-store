@@ -1,7 +1,7 @@
 import { getCollections } from "@/lib/shopify";
 import { VideoReference } from "@/lib/shopify/types";
 
-async function getIntroCollection() {
+export async function getIntroCollection() {
     const collections = await getCollections();
     const introCollection =  collections.filter((c) => c.metafields?.find((m) => m?.key === "isnewrelease" && m.value === "true"));
    

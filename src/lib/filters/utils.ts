@@ -61,6 +61,21 @@ export function parseFiltersFromSearchParams(
 export function buildFilterQuery(filters: ActiveFilters, searchQuery?: string): string {
   const queryParts: string[] = [];
 
+  const formatValue = (value: string) => {
+    const trimmed = value.trim();
+    if (trimmed === "") {
+      return '""';
+    }
+    const escaped = trimmed.replace(/"/g, '\\"');
+    return `"${escaped}"`;
+  };
+
+  const normalizeOptionName = (name: string) =>
+    name
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "_");
+
   // Add search query
   if (searchQuery) {
     queryParts.push(searchQuery);
@@ -68,14 +83,18 @@ export function buildFilterQuery(filters: ActiveFilters, searchQuery?: string): 
 
   // Add tag filters
   if (filters.tags.length > 0) {
-    const tagQuery = filters.tags.map((tag) => `tag:${tag}`).join(" OR ");
+    const tagQuery = filters.tags
+      .filter((tag) => !!tag)
+      .map((tag) => `tag:${formatValue(tag)}`)
+      .join(" OR ");
     queryParts.push(`(${tagQuery})`);
   }
 
   // Add collection filters
   if (filters.collections.length > 0) {
     const collectionQuery = filters.collections
-      .map((collection) => `collection:${collection}`)
+      .filter((collection) => !!collection)
+      .map((collection) => `collection:${formatValue(collection)}`)
       .join(" OR ");
     queryParts.push(`(${collectionQuery})`);
   }
@@ -83,7 +102,8 @@ export function buildFilterQuery(filters: ActiveFilters, searchQuery?: string): 
   // Add product type filters
   if (filters.productType && filters.productType.length > 0) {
     const productTypeQuery = filters.productType
-      .map((type) => `product_type:${type}`)
+      .filter((type) => !!type)
+      .map((type) => `product_type:${formatValue(type)}`)
       .join(" OR ");
     queryParts.push(`(${productTypeQuery})`);
   }
@@ -96,7 +116,13 @@ export function buildFilterQuery(filters: ActiveFilters, searchQuery?: string): 
   Object.entries(filters.options).forEach(([optionName, values]) => {
     if (values.length > 0) {
       const optionQuery = values
-        .map((value) => `option:${optionName}:${value}`)
+        .filter((value) => !!value)
+        .map(
+          (value) =>
+            `variant_options.${normalizeOptionName(optionName)}:${formatValue(
+              value
+            )}`
+        )
         .join(" OR ");
       queryParts.push(`(${optionQuery})`);
     }
@@ -303,5 +329,87 @@ export function getActiveFiltersFromProducts(products: any[]): {
       max: maxPrice === -Infinity ? 0 : maxPrice,
     },
   };
+}
+
+function variantMatchesOptionFilters(
+  variant: any,
+  optionFilters: Array<[string, string[]]>
+): boolean {
+  const selectedOptions: Array<{ name?: string; value?: string }> =
+    variant?.selectedOptions || [];
+
+  return optionFilters.every(([optionName, values]) => {
+    if (!values || values.length === 0) {
+      return true;
+    }
+
+    const matchingSelection = selectedOptions.find((selected) => {
+      if (!selected?.name) {
+        return false;
+      }
+
+      return selected.name.toLowerCase() === optionName.toLowerCase();
+    });
+
+    if (!matchingSelection?.value) {
+      return false;
+    }
+
+    return values.includes(matchingSelection.value);
+  });
+}
+
+export function productMatchesAllFilters(
+  product: any,
+  filters: ActiveFilters
+): boolean {
+  if (!product) {
+    return false;
+  }
+
+  const minVariantPrice = parseFloat(
+    product?.priceRange?.minVariantPrice?.amount || "0"
+  );
+  const maxVariantPrice = parseFloat(
+    product?.priceRange?.maxVariantPrice?.amount || "0"
+  );
+
+  if (filters.price) {
+    if (
+      typeof filters.price.min === "number" &&
+      maxVariantPrice < filters.price.min
+    ) {
+      return false;
+    }
+    if (
+      typeof filters.price.max === "number" &&
+      minVariantPrice > filters.price.max
+    ) {
+      return false;
+    }
+  }
+
+  if (filters.productType && filters.productType.length > 0) {
+    if (!filters.productType.includes(product?.productType)) {
+      return false;
+    }
+  }
+
+  const optionFilters = Object.entries(filters.options || {}).filter(
+    ([, values]) => Array.isArray(values) && values.length > 0
+  );
+
+  if (optionFilters.length > 0) {
+    const variants: any[] = product?.variants || [];
+    const hasMatchingVariant = variants.some((variant) =>
+      variantMatchesOptionFilters(variant, optionFilters)
+    );
+
+    if (!hasMatchingVariant) {
+      return false;
+    }
+  }
+
+  return true;
 }
 

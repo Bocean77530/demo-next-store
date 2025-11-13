@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import clsx from "clsx";
-import { jewelryLinks, collectionLinks } from "./consts";
+import { jewelryLinks, collectionLinks, cultureLinks } from "./consts";
 
 export default function MegaMenu() {
   const [open, setOpen] = useState(false);
@@ -38,9 +38,10 @@ export default function MegaMenu() {
       >
         <div className=" border border-neutral-200/70 bg-white p-6 shadow-xl shadow-neutral-900/10 dark:border-neutral-700 dark:bg-neutral-900 dark:shadow-black/40">
           
-          <div className="grid grid-cols-2 gap-10" >
+          <div className="grid grid-cols-3 gap-10" >
             <MegaMenuColumn title="Jewelry" links={jewelryLinks} />
             <MegaMenuColumn title="Collections" links={collectionLinks} />
+            <MegaMenuColumn title="Culture" links={cultureLinks} />
           </div>
         </div>
       </div>
