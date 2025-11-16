@@ -147,7 +147,7 @@ export default function IntroProductsCarousel({
                     className="text-base font-semibold text-neutral-900 dark:text-white"
                   />
                   <p className="text-xs font-medium uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
-                    {product.availableForSale ? "In stock" : "Sold out"}
+                    {product.availableForSale ? "" : "Sold out"}
                   </p>
                 </div>
               </Link>
