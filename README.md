@@ -1,5 +1,3 @@
-[![Building Next.js Ecommerce Store with TypeScript, Tailwindcss, headlessui, and Shopify CMS.](https://img.youtube.com/vi/fJxzVFXGT_E/0.jpg)](https://www.youtube.com/watch?v=fJxzVFXGT_E)
-
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
